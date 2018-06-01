@@ -25,12 +25,12 @@ Getting Started
 
 This package depends on the following packages:
 
+- `ipywidgets` (version >= 7.2.0)
 - `appmode` (This allows the Jupyter notebook to run as an app)
 - `bqplot`
 
 which in turn depends on
 
-- `ipywidgets` (version >= 7.0.0)
 - `traitlets` (version >= 4.3.0)
 - `traittypes`
 - `numpy`
