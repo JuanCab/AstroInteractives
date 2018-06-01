@@ -21,6 +21,14 @@ Getting Started
 
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/JuanCab/AstroInteractives/master?filepath=index.ipynb)
 
+To try each of the individual Jupyter Notebooks in AppMode, try the following links.
+
+1. [Blackbody Simulation](https://mybinder.org/v2/gh/JuanCab/AstroInteractives/master?filepath=%2Fapps%2FBlackbodySimulation/BlackbodySimulation.ipynb) - This simulation shows a Planck spectrum with user controls for the temperature.  We eventually hope to add B-V color estimation, similar to the [Flash-based UNL Blackbody Curves activity](https://mybinder.org/v2/gh/JuanCab/AstroInteractives/master?filepath=http://astro.unl.edu/classaction/animations/light/bbexplorer.html)
+2. [Center of Mass Interactive](%2Fapps%2FCenter_of_Mass/Center_of_Mass.ipynb) - This simulation simply allows a student to adjust the mass of two stars and dynamically shifts them back and forth to illustrate the center of mass position.  **Note:** The star colors and relative radii are approximately accurate assuming they are main sequence stars!
+3. [HR Diagram Interactive](https://mybinder.org/v2/gh/JuanCab/AstroInteractives/master?filepath=%2Fapps%2FHRdiagram/Interactive_HR_Diagram.ipynb) - This set of interactive graphics allows a student to explore the data that goes into the HR diagram, then how main sequence fitting can be used to determine the distance to a star cluster, and finally, how detailed stellar evolution models can be used to also determine the age of a star cluster.  **Note:** This notebook uses all "real data" with the exception of the fact that to show a brightness diagram corresponding to an HR diagram, the distances (and corresponding brightnesses) were 'assigned.'
+4. [Luminosity Calculator Interactive](https://mybinder.org/v2/gh/JuanCab/AstroInteractives/master?filepath=%2Fapps%2FLuminosityCalculator/LuminosityCalculator.ipynb) - This activity is used to illustrate to students how the radius and temperature of a star affect its luminosity.  **Note:** The colors of the stars accurately correspond to the temperature, but the stars produced might not have radii and temperatures that correspond to real stars.
+5. [Radioactive Isochrones Interactive](https://mybinder.org/v2/gh/JuanCab/AstroInteractives/master?filepath=%2Fapps%2FRadioactiveIsochrones/Isochrones.ipynb) - This activity is used to illustrate how radioactive dataing works using radioactive isochrones.  It is meant to be used after introducing the students to the concept of half-lives.
+
 ### Dependencies
 
 This package depends on the following packages:
