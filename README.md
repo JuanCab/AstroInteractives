@@ -28,6 +28,7 @@ This package depends on the following packages:
 - `ipywidgets` (version >= 7.2.0)
 - `appmode` (This allows the Jupyter notebook to run as an app)
 - `bqplot`
+- `matplotlib`
 
 which in turn depends on
 
