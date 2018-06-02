@@ -6,6 +6,5 @@ dependencies:
   - bqplot
   - pandas
   - scipy
-  - matplotlib>=2.0
   - ipywidgets>=7.2
   - numpy>=1.13,<1.14  
