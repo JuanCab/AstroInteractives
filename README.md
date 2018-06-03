@@ -1,7 +1,7 @@
 Astro Interactives
 ==================
 
-*Astro Interactives* is a series of Jupyter Notebooks meant to provide 
+[*Astro Interactives*](https://juancab.github.io/AstroInteractives/) is a series of Jupyter Notebooks meant to provide 
 interactive demos and simulations for introductory astronomy courses.  These notebooks were initially developed by 
 - Juan Cabanela (Professor for Physics and Astronomy at Minnesota State University Moorhead)
 - Andrew Louwagie Gordon (Student at Minnesota State University Moorhead)
@@ -33,7 +33,7 @@ The currently available Jupyter Notebooks (in no particular order) are the follo
 
 ### Dependencies
 
-This package depends on the following packages:
+These Jupyter notebooks require a `jupyter notebook` installation as well as the following python packages:
 
 - `ipywidgets` (version >= 7.2.0)
 - `appmode` (This allows the Jupyter notebook to run as an app)
@@ -50,5 +50,5 @@ which in turn depends on
 Help / Documentation
 --------------------
 
-- The documentation for how the code does what it does is in the comments. 
+- The documentation for how the Python notebooks do what they do are in the code comments for now.  We hope to eventually add copies of some of the lab exercises we do so people can see these on context.
 - Send us an email at cabanela@mnstate.edu if you need any help/information.
