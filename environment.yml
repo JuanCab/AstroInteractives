@@ -1,4 +1,4 @@
-name: astroactives
+name: astrointeractives
 channels:
   - conda-forge
 dependencies:
@@ -8,3 +8,4 @@ dependencies:
   - scipy
   - ipywidgets>=7.2
   - numpy>=1.13,<1.14  
+  - pythreejs>=1.0.0
