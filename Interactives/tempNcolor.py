@@ -192,7 +192,7 @@ def wav2rgb(wavelength):
     color[range3, 2] = - (w[range3] - 510) / (510 - 490)
 
     range4 = (w>=510) & (w<580)
-    color[range4, 0] = (w[range4] - 510) / (580 - 410)
+    color[range4, 0] = (w[range4] - 510) / (580 - 510)
     color[range4, 1] = 1
     color[range4, 2] = 0
     
