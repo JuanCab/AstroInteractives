@@ -19,7 +19,7 @@ Getting Started
 
 ### Try it online with [Binder](http://mybinder.org/)
 
-[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/JuanCab/AstroInteractives/master?urlpath=index.ipynb)
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/JuanCab/AstroInteractives/master?filepath=index.ipynb)
 
 ### Available Notebooks
 
