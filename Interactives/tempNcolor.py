@@ -1,11 +1,59 @@
-import numpy as np
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+tempNcolor
 
-# I discovered Ballestros routines to convert B-V to temperature and back
-# (Ballestreros et al. 2012) are used by PyAstronomy (props to Andrew
-# Louwagie-Gordon for initial pointing).    In addition to that, I grabbed
-# a python routine for getting RGB colors from Temp developed at
-# https://stackoverflow.com/questions/21977786/star-b-v-color-index-to-apparent-rgb-color#22630970
-# and added code defining that conversion that as well.
+This is a set of functions for 
+
+- Converting B-V colors into temperature and back.
+
+  I found the Ballestros routines to convert B-V to temperature and back 
+  (Ballestreros et al. 2012) are used by PyAstronomy (props to Andrew
+  Louwagie-Gordon for initial pointing).    
+
+- Converting B-V color into RGB (or hexcolor) equivalent.
+
+  In addition to the Ballestreros code grabbed from PyAstronomy 0.12.0, I added
+  code for handling Temp to RGB conversion. The original version was developed  
+  at
+  
+  https://stackoverflow.com/questions/21977786/star-b-v-color-index-to-apparent-rgb-color#22630970
+  
+  though I modified it to handle nupy arrays as input and improved the fit
+  dramatically at temperatures above 30000K by updating the Red, Green, and
+  Blue coefficients to obtain a much better fit at high temperatures.
+
+- Converting a wavelength into RGB (or hexcolor) equivalent.
+
+  The code for converting wavelength into RGB color is based on code found at
+  
+  http://codingmess.blogspot.com/2009/05/conversion-of-wavelength-in-nanometers.html
+  
+  although I modified it to handle array inputs.
+
+Functions included
+------------------
+bv2temp(bv):
+    Convert B-V color into temperature
+temp2bv(T):
+    Convert temperature into B-V color
+temp2rgb(temp):
+    Convert temperature into RGB color 
+bv2rgb(bv):
+    Convert B-V color into RGB color
+rgb2hex(rgb):
+    Convert RGB colors into hexcolors
+wav2rgb(wavelength):
+    Convert wavelength (in nm) into equivalent RGB color
+wav2hex(wavelength):
+    Convert wavelength (in nm) into equivalent hexcolor
+
+Created on Thu May 24 12:00:00 2018
+
+@author: Juan Cabanela
+"""
+
+import numpy as np
 
 class BallesterosBV_T:
     """
@@ -24,34 +72,34 @@ class BallesterosBV_T:
 
     def bv2T(self, bv):
         """
-            Convert B-V color into temperature.
-            
-            Parameters
-            ----------
-            bv : float
-                    B-V color index [mag]
+        Convert B-V color into temperature.
+        
+        Parameters
+        ----------
+        bv : float
+                B-V color index [mag]
 
-            Returns
-            -------
-            T : float
-                    Temperature [K]
+        Returns
+        -------
+        T : float
+                Temperature [K]
         """
         T = self._T0*(1.0/(self._a*bv + self._b) + 1.0/(self._a*bv + self._c))
         return T
 
     def t2bv(self, T):
         """
-            Convert temperature into B-V color.
+        Convert temperature into B-V color.
 
-            Parameters
-            ----------
-            T : float
-                    Temperature in K.
+        Parameters
+        ----------
+        T : float
+                Temperature in K.
 
-            Returns
-            -------
-            bv : float
-                    B-V color index [mag].
+        Returns
+        -------
+        bv : float
+                B-V color index [mag].
         """
         z = T / self._T0
         ap = z*self._a**2
@@ -77,14 +125,6 @@ def temp2bv(T):
 temp2bv.__doc__ = BallesterosBV_T.t2bv.__doc__
 
 
-
-# In addition to the above code grabbed from PyAstronomy 0.12.0, I have added
-# the following code for handling Temp to RGB conversion.  The original version 
-# was developed at
-# https://stackoverflow.com/questions/21977786/star-b-v-color-index-to-apparent-rgb-color#22630970
-# although I modified it to handle nupy arrays as input and improved the fit
-# (by updating the coefficients in redcoeff, greencoeff, and bluecoeff), since
-# it really sucked at temperatures above 30000K. - Juan 05.24.2018
 
 redcoeff = [5.342704572546931e-65, -1.7530489889997716e-59,
             2.611699966829653e-54, -2.336551831940032e-49,
@@ -116,6 +156,19 @@ greenco = np.poly1d(greencoeff)
 blueco = np.poly1d(bluecoeff)
 
 def temp2rgb(temp):
+    """
+    Convert temperature into RGB color.
+
+    Parameters
+    ----------
+    T : float/array
+            Temperature in K.
+
+    Returns
+    -------
+    color : array
+            array of R, G, B values, a row for each temperature provided.
+    """
     red = 0
     green = 0
     blue = 0
@@ -149,27 +202,53 @@ def temp2rgb(temp):
     return color
 
 
-# Created a routine to take B-V straight to RGB
 def bv2rgb(bv):
+    """
+    Convert B-V color into RGB color
+
+    Parameters
+    ----------
+    bv : float/array
+            B-V color index [mag].
+
+    Returns
+    -------
+    color : array
+            array of R, G, B values, a row for each temperature provided.
+    """
     return temp2rgb(bv2temp(bv))
 
 
-# Convert RGB array (rows of R, G, B values) in np.array of hex codes
 def rgb2hex(rgb):
+    """
+    Convert RGB array (rows of R, G, B values) in np.array of hex codes
+
+    Parameters
+    ----------
+    color : array
+            array of R, G, B values
+
+    Returns
+    -------
+    hexcolor : array
+            array of hexcolor values, one for each row in the color array
+    """
     return np.array([ '#%02x%02x%02x' % (r,g,b)  for r, g, b in rgb ])
                      
-"""
-Code for making spectral plots in color is based on code found at
-http://codingmess.blogspot.com/2009/05/conversion-of-wavelength-in-nanometers.html
-
-I modified it to handle array inputs.
-"""
 
 def wav2rgb(wavelength):
     """
-    Input wavelength is in nanometers (either scalar or integer)
+    Converts wavelength in nanometers into corresponding RGB values.
 
-    Return R, G, and B values in three column array color.
+    Parameters
+    ----------
+    wavelength : float/array
+           wavelength of light [nm].
+
+    Returns
+    -------
+    color : array
+            array of R, G, B values, a row for each wavelength provided.
     """
     w = np.round(np.array(wavelength))
     color = np.zeros([w.size,3], dtype='float')
@@ -217,4 +296,17 @@ def wav2rgb(wavelength):
     return np.array(color*255*SSS[:,np.newaxis], dtype='int')
 
 def wav2hex(wavelength):
+    """
+    Convert RGB color into hexcolor
+
+    Parameters
+    ----------
+    color : array
+            array of R, G, B values
+
+    Returns
+    -------
+    hexcolor : array
+            array of hexcolor values, one for each row in the color array
+    """
     return rgb2hex(wav2rgb(wavelength))
