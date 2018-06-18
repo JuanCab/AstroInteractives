@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-expToLaTeX
+number_formatting
 
-This library contains a function to convert a number into a equivalent
-scientific notation string (and LaTeX string) to display.
+This library containsfunctions for format numbers into various useful formats.
 
 Functions included
 ------------------
 exp2LaTeX(num, sig_fig=2):
     Converts number into equivalent scientific notation string (and LaTeX string).
-
+SigFig(num, sig_fig=2):
+    Rounds a number into a set number of significant figures.
+    
 Created on Thu May 24 12:00:00 2018
 
-@author: Sam Holen
+@author: Sam Holen and Juan Cabanela
 """
+import numpy as np
+
 
 def exp2LaTeX(num, sig_fig=2):
     """
@@ -48,6 +51,7 @@ def exp2LaTeX(num, sig_fig=2):
         print("Invalid input")
     else:
         num = float(num)
+        
     if 'e' in str(num):
         num = str(num)
         stop = num.find("e")
@@ -62,7 +66,7 @@ def exp2LaTeX(num, sig_fig=2):
         if len(base) >= sig_fig:
             base = ('{'+':'+'.'+str(sig_fig-1)+'f'+'}').format(float(base))
         new_num = base + ' * 10^' + power
-        new_num_LaTeX = base + ' \cdot 10^{' + power + '}'
+        new_num_LaTeX = base + ' \\times 10^{' + power + '}'
     elif num >= 100000.0:
         num = str(num)
         stop = len(num) - 1
@@ -71,7 +75,7 @@ def exp2LaTeX(num, sig_fig=2):
         if len(base)-1 >= sig_fig:
             base = ('{'+':'+'.'+str(sig_fig-1)+'f'+'}').format(float(base))
         new_num = base + ' * 10^' + power
-        new_num_LaTeX = base + ' \cdot 10^{' + power + '}'
+        new_num_LaTeX = base + ' \\times 10^{' + power + '}'
     elif num < 1:  
         if num == 0:
             new_num = str(num)
@@ -111,12 +115,38 @@ def exp2LaTeX(num, sig_fig=2):
         new_num_LaTeX = new_num
     return [new_num, new_num_LaTeX]
 
-# Test this library
-if __name__ == '__main__':
-    tests = [526553.5,.002,12.79,2.561e17,0]
-    for i in tests:
-        print(exp2LaTeX(i,12))
 
+def SigFig(num, sig_fig=2):
+    """
+    This function takes any integer, float, or string number,
+    so long as it is entered in a format that can be converted into
+    a float and rounds it to 'digits' significant figures.
 
+    Parameters
+    ----------
+    num : float
+           a number (must be convertable to float with call to float(num))
+    sig_fig : int
+               the number of signficant figures to keep. (default 2)
 
+    Returns
+    -------
+    new_num : float
+               returns the number rounded to the proper number of significant
+               figures.
+    """
+
+    # Compute log of number and round down, this sets where the initial
+    # significant figure is.
+    loglum = np.floor(np.log10(num))
+
+    # Determine number of digits to round to
+    rnd_val = int(sig_fig-loglum-1)
+
+    if (rnd_val >= 0):
+        format_str = "{0:."+str(int(rnd_val))+"f}"
+    else:
+        format_str = "{0:.0f}"
+
+    return format_str.format(num)
 

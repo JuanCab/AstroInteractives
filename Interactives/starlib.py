@@ -105,7 +105,7 @@ def ConfigStar(mass = 1.0):
     return (radius, temp, hexcolor)
 
 
-def StarMesh(temp=5700, rad=1,  scale=(1, 1, 1), pos=[0, 0, 0]):
+def StarMesh(temp=5777, rad=1,  scale=(1, 1, 1), pos=[0, 0, 0]):
     '''
     This function creates a pythreejs object that represents a star using
     a texture based on public domain STEREO Heliographic map made with
@@ -116,7 +116,7 @@ def StarMesh(temp=5700, rad=1,  scale=(1, 1, 1), pos=[0, 0, 0]):
     Parameters
     ----------
     temp : float
-            temperature of star in Kelvin (default 5700)
+            temperature of star in Kelvin (default 5777)
     rad : float
             radius of the star in system units (default 1)
     scale : tuple
@@ -136,9 +136,9 @@ def StarMesh(temp=5700, rad=1,  scale=(1, 1, 1), pos=[0, 0, 0]):
         if (len(pos) != 3):
             raise TypeError('pos passed to StarMesh must be list of 3 numbers')
         # Check that all the items in the list are numbers
-        for temp in pos:
+        for this_pos in pos:
             try:
-                i = float(temp)
+                i = float(this_pos)
             except ValueError:
                 raise TypeError('ValueError: pos contains list item that is not a number.')
     else:
@@ -152,7 +152,7 @@ def StarMesh(temp=5700, rad=1,  scale=(1, 1, 1), pos=[0, 0, 0]):
         raise TypeError('scale must be a tuple')
     
     # Define color and texture of star surface
-    hexcolor = tc.rgb2hex(tc.temp2rgb(temp))[0]
+    hexcolor = tc.rgb2hex(tc.temp2rgb(float(temp)))[0]   
     StarTexture = p3j.ImageTexture(imageUri='images/sun_surface.jpg')
 
     # Create sphere using MeshBasicMaterial (which is unaffected by lighting)
@@ -237,9 +237,9 @@ def axes(max_dist):
     axes : pythreejs.Line
             a pythreejs Line object representing the xyz axes.
     '''
-    axes_geom = p3j.Geometry(vertices=[[0, 0, 0], [max_width, 0, 0],
-                                       [0, 0, 0], [0, max_width, 0],
-                                       [0, 0, 0], [0, 0, max_width]],
+    axes_geom = p3j.Geometry(vertices=[[0, 0, 0], [max_dist, 0, 0],
+                                       [0, 0, 0], [0, max_dist, 0],
+                                       [0, 0, 0], [0, 0, max_dist]],
                              colors = ['white', 'white', 'white',
                                        'white', 'white', 'white'])
 
