@@ -99,11 +99,8 @@ def exp2LaTeX(num, sig_fig=2):
     else:
         num2 = str(num)
         if len(num2[:num2.find('.')]) > sig_fig:
-            length = len(num2[:num2.find('.')])
-            if num2[sig_fig] < '5':     
-                new_num = str(round(num))
-            else:
-                new_num = num2[:sig_fig-1] + str(int(num2[sig_fig-1])+1) + ('0'*(length-sig_fig))
+            length = len(num2[:num2.find('.')])     
+            new_num = str(int(round(num,-(length-sig_fig))))
         elif len(num2[:num2.find('.')]) == sig_fig:
             new_num = ('{:.0f}').format(num)
 
@@ -135,18 +132,30 @@ def SigFig(num, sig_fig=2):
                returns the number rounded to the proper number of significant
                figures.
     """
-
-    # Compute log of number and round down, this sets where the initial
-    # significant figure is.
-    loglum = np.floor(np.log10(num))
-
+    # Confirm sig_fig value acceptable
+    if (sig_fig < 1):
+        sig_fig = 2
+        
+    # Compute log of number and use that to separate out the exponent and
+    # coefficients
+    num = float(num)  # Convert input to float
+    exponent = np.floor(np.log10(num))
+    order = pow(10,np.floor(exponent))
+    coeff = num/order
+    
     # Determine number of digits to round to
     rnd_val = int(sig_fig-loglum-1)
-
-    if (rnd_val >= 0):
-        format_str = "{0:."+str(int(rnd_val))+"f}"
+    # Create the format string for the coeff
+    format_str = "{0:."+str(int(sig_fig-1))+"f}"
+    
+    new_num = float(format_str.format(coeff))*order
+    print(exponent, sig_fig, new_num)
+    if ((exponent>13) or (exponent<-13)):
+        return float(new_num)
+    elif (sig_fig<=exponent):
+        return int(new_num)
     else:
-        format_str = "{0:.0f}"
+        return float(new_num)
 
-    return format_str.format(num)
+
 
