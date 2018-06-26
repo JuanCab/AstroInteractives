@@ -143,13 +143,11 @@ def SigFig(num, sig_fig=2):
     order = pow(10,np.floor(exponent))
     coeff = num/order
     
-    # Determine number of digits to round to
-    rnd_val = int(sig_fig-loglum-1)
     # Create the format string for the coeff
     format_str = "{0:."+str(int(sig_fig-1))+"f}"
     
     new_num = float(format_str.format(coeff))*order
-    print(exponent, sig_fig, new_num)
+    
     if ((exponent>13) or (exponent<-13)):
         return float(new_num)
     elif (sig_fig<=exponent):

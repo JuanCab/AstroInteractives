@@ -173,12 +173,12 @@ def temp2rgb(temp):
     green = 0
     blue = 0
 
-    """ Force values outside temperature bounds into proper range """
+    # Force values outside temperature bounds into proper range
     temp = np.array(temp)
     temp[temp < 2000] = 2000
     temp[temp > 40000] = 40000
         
-    """ since all lists have to have equal length, this is ok."""
+    # since all lists have to have equal length, this is ok.
     red = np.array(redco(temp))
     green = np.array(greenco(temp))
     blue = np.array(blueco(temp))
