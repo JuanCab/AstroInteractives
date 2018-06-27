@@ -511,6 +511,7 @@ def LightCurveInfo(orbit_info, incl, rad1, rad2, temp1, temp2, Na=100, Ntheta=36
     LightCurveInfo['time'] = orbit_info['time']
     LightCurveInfo['phase'] = orbit_info['time']/float(orbit_info['time'][-1:])
     LightCurveInfo['F_norm'] = np.ones_like(orbit_info['time'])
+    LightCurveInfo['in_front'] = np.zeros_like(orbit_info['time'])
  
     # Check if the stars are going to collide, if they are, return a zeroed
     # out light curve
@@ -592,13 +593,13 @@ def LightCurveInfo(orbit_info, incl, rad1, rad2, temp1, temp2, Na=100, Ntheta=36
         # If completely eclipsed, save flux of foreground star and skip 
         # the computation
         if (dist + Rb < Rf):
-            LightCurveInfo['F_visible'][t_idx] = F / F_tot
+            LightCurveInfo['F_norm'][t_idx] = F / F_tot
             continue
         
         # Determine radii for computations of obscured background disk
         if (dist < Rb - Rf): # Foreground disk entirely within background disk
-            r_outer = d + Rf
-            r_inner = d - Rf
+            r_outer = dist + Rf
+            r_inner = dist - Rf
             if (r_inner < 0):
                 r_inner = 0
         else:    # Foreground disk covers part of background disk
@@ -666,4 +667,3 @@ def FluxVRad(T, r, Radius):
     
     # Return flux assuming blackbody emission    
     return sigma * T**4 * ld_corr
-

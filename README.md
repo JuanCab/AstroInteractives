@@ -54,7 +54,6 @@ Known Issues
 - The tooltip in the radioactive decay simulation is not working properly.
 - Display of equations can lag, allowing underlying LaTeX to be visible briefly.
 - We are aware of some issues running interactives that use 3D widgets from *pythreejs* in *AppMode*.
-- The light curve in the Binary Star Simulator seems to be miscomputed in some situations.
 
 Help / Documentation
 --------------------
