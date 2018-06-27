@@ -26,7 +26,7 @@ OrbitalInfo(mass1, mass2, a, e, phi, N):
 RadVelInfo(orbit_info, incl):
     Returns radial velocity Pandas dataframe time series information 
     corresponding to a given orbit_info Pandas dataframe and inclination angle.
-LightCurveInfo(orbit_info, incl, rad1, rad2, temp1, temp2)
+LightCurveInfo(orbit_info, incl, rad1, rad2, temp1, temp2, Na, Ntheta)
     Returns a light curve Pandas dataframe time series information
     corresponding to given orbit_info, inclination, and stellar parameters.
     
@@ -344,7 +344,7 @@ def OrbitalInfo(mass1, mass2, a, e, phi=0, N=1000):
 
 
     # Set up empty Pandas dataframe
-    orbit_info = pd.DataFrame(columns=['time', 'x1', 'y1', 'vx1', 'vy1',
+    orbit_info = pd.DataFrame(columns=['time', 'r', 'x1', 'y1', 'vx1', 'vy1',
                                        'x2', 'y2', 'vx2', 'vy2'])
 
     # Convert inputs into SI
@@ -402,6 +402,7 @@ def OrbitalInfo(mass1, mass2, a, e, phi=0, N=1000):
 
     # Store in the data frame
     orbit_info['time'] = t_days
+    orbit_info['r']  = r_SI/AU
     orbit_info['x1'] = x1_SI/AU
     orbit_info['y1'] = y1_SI/AU
     orbit_info['x2'] = x2_SI/AU
@@ -463,12 +464,15 @@ def RadVelInfo(orbit_info, incl, rv_sys=0):
 
 
 
-def LightCurveInfo(orbit_info, incl, rad1, rad2, temp1, temp2):    
+def LightCurveInfo(orbit_info, incl, rad1, rad2, temp1, temp2, Na=100, Ntheta=360):    
     """
     Using the Pandas dataframe of orbital information (orbit_info) output
     by the OrbitalInfo().  It assumes the same coordinate system used for
     the orbital plane calculations in OrbitalInfo().  it assumes positive
     radial velocities are radially AWAY from Earth.
+    
+    WARNING: This function doesn't work properly if the two stars are going to
+    collide during their orbit.
 
     Parameters
     ----------
@@ -485,12 +489,18 @@ def LightCurveInfo(orbit_info, incl, rad1, rad2, temp1, temp2):
          effective temperature of star 1 (in K)
     temp2 : float
          effective temperature of star 2 (in K)
-
+    Na : int
+          number of annuli to use in computing eclipse percentage 
+          (default of 100)
+    Ntheta : int
+              number of angular steps to use in computing eclipse percentage
+              (default of 360)
+              
     Returns
     -------
     LightCurveInfo : Pandas dataframe 
                  time series percentage of total system flux visible.
-    """
+    """        
     
     # Configure settings for computations
     Na = 100       # number of annuli to use to estimate flux
@@ -501,7 +511,13 @@ def LightCurveInfo(orbit_info, incl, rad1, rad2, temp1, temp2):
     LightCurveInfo['time'] = orbit_info['time']
     LightCurveInfo['phase'] = orbit_info['time']/float(orbit_info['time'][-1:])
     LightCurveInfo['F_norm'] = np.ones_like(orbit_info['time'])
-    
+ 
+    # Check if the stars are going to collide, if they are, return a zeroed
+    # out light curve
+    if (np.min(orbit_info['r']*AU/R_Sun) < (rad1 + rad2)):
+        LightCurveInfo['F_norm'] = np.zeros_like(orbit_info['time'])
+        return LightCurveInfo
+        
     # Convert information into SI units
     rad1_SI = rad1*R_Sun
     rad2_SI = rad2*R_Sun
@@ -608,7 +624,7 @@ def LightCurveInfo(orbit_info, incl, rad1, rad2, temp1, temp2):
         F += np.sum(dF*visible)
         LightCurveInfo['F_norm'][t_idx] = F / F_tot
 
-    return(LightCurveInfo)
+    return LightCurveInfo
     
 
 def FluxVRad(T, r, Radius):
