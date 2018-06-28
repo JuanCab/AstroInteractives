@@ -14,8 +14,11 @@ Temp_calc(mass):
     Returns the temperature of a star of a given mass.
 ConfigStar(mass):
     Returns the radius, temperature and hexcolor of a star of a given mass.
-StarMesh(temp, rad=,  scale, pos):
+StarMesh(temp, rad, scale, pos):
     Returns a pythreejs Mesh object corresponding to a star.
+OldStarMesh(temp, rad, scale, pos):
+    Returns a pythreejs Mesh object corresponding to a star using old texture 
+    approach.
 xyplane(max_dist, grid_space):
     Returns a pythreejs Mesh and SurfaceGrid corresponding to the xy plane.
 axes(max_dist):
@@ -142,7 +145,7 @@ def ConfigStar(mass=1.0):
     return (radius, temp, hexcolor)
 
 
-def StarMesh(temp=Te_Sun, rad=1,  scale=(1, 1, 1), pos=[0, 0, 0]):
+def OldStarMesh(temp=Te_Sun, rad=1,  scale=(1, 1, 1), pos=[0, 0, 0]):
     """
     This function creates a pythreejs object that represents a star using
     a texture based on public domain STEREO Heliographic map made with
@@ -201,6 +204,113 @@ def StarMesh(temp=Te_Sun, rad=1,  scale=(1, 1, 1), pos=[0, 0, 0]):
                     position=pos, scale=scale)
 
 
+def StarMesh(temp=Te_Sun, rad=1,  scale=(1, 1, 1), pos=[0, 0, 0]):
+    """
+    This function creates a pythreejs object that represents a star using
+    a set of nested spheres that are partly transparent to simulate limb
+    darkening.
+
+    Parameters
+    ----------
+    temp : float
+            temperature of star in Kelvin (default 5777)
+    rad : float
+            radius of the star in system units (default 1)
+    scale : tuple
+             pythreejs scale in each dimension as tuple (default (1, 1, 1) )
+    pos : list
+           three-dimensional position as list (default [0, 0, 0] )
+
+    Returns
+    -------
+    star : pythreejs.Mesh
+              a spherical pythreejs Mesh object representing a star
+    """
+
+    # Check is position is a list
+    if isinstance(pos, list):
+        # Check if this is a list of 3 items
+        if (len(pos) != 3):
+            raise TypeError('pos passed to StarMesh must be list of 3 numbers')
+        # Check that all the items in the list are numbers
+        for this_pos in pos:
+            try:
+                i = float(this_pos)
+            except ValueError:
+                raise TypeError('ValueError: pos contains list item that is not a number.')
+    else:
+        raise TypeError('pos passed to StarMesh must be list of 3 numbers')
+
+    # Check is scale is a tuple
+    if isinstance(scale, tuple):
+        if (len(scale) != 3):
+            raise TypeError('scale passed to StarMesh must be tuple of 3 numbers')
+    else:
+        raise TypeError('scale must be a tuple')
+
+    # Define color of star surface
+    hexcolor = tc.rgb2hex(tc.temp2rgb(float(temp)))[0]
+    
+    # Number of transparent layers to use to build star
+    layers = 20
+    
+    # Radial scaling
+    drad = 0.97
+
+    # Starting resolution
+    N_azi,  N_pol = 32, 16
+
+    # Layer opacity
+    tau = 0.4
+    
+    # Radii to use 
+    radii = rad*drad**np.array(range(layers-1,-1,-1))
+    
+    # 3D object to represent star
+    star = p3j.Object3D()
+    
+    # Build the object from inside out
+    for i in range(layers):
+        # Tweak number of vertices in sphere up for the outer surface sphere
+        if (i > (layers-2)):
+            N_azi *= 2
+            N_pol *= 2
+            
+        geom = p3j.SphereBufferGeometry(radius=radii[i], 
+                                         widthSegments=N_azi, 
+                                         heightSegments=N_pol,
+                                         renderOrder=-i)
+
+        material = p3j.MeshBasicMaterial(color=hexcolor, 
+                                         transparent=True, 
+                                         opacity=tau)
+        star.add(p3j.Mesh(geom, material))
+    
+    # Set the position and scale of this mesh
+    star.position = pos
+    star.scale=scale
+    
+    return star
+
+
+def StarMeshColor(star, color):
+    """
+    This function allows you to change the color of a StarMesh in 
+    one call (since it is composed of multiple sphere objects, it
+    can't be done in a single call).
+
+    Parameters
+    ----------
+    star : pythreejs.Mesh
+              a spherical pythreejs Mesh object representing a star
+    color : color
+             Any pythreejs color
+    """
+    
+    for i in range(len(star.children)):
+        star.children[i].material.color = color
+ 
+    
 def xyplane(max_dist, grid_space):
     """
     Generates and returns two pythreejs items: a mesh of a flat surface and a
@@ -250,7 +360,7 @@ def xyplane(max_dist, grid_space):
     surface_material = p3j.MeshBasicMaterial(color='darkslategrey',
                                              transparent=True, opacity=0.5)
     surf = p3j.Mesh(geometry=surf_g, material=surface_material)
-    grid_material = p3j.LineBasicMaterial(color='white')
+    grid_material = p3j.LineBasicMaterial(color='grey')
 
     # To avoid overlap, lift grid slightly above the plane scaling
     # by size of grid

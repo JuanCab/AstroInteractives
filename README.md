@@ -52,7 +52,7 @@ which in turn depends on
 Known Issues
 ------------
 - Display of equations can lag, allowing underlying LaTeX to be visible briefly.
-- We are aware of some issues running interactives that use 3D widgets from *pythreejs* in *AppMode*, specifically some of the textures on the 3D objects may not work.
+- When run in Binder, some of the widgets are showing additional scrollbars.  We are working on addressing this.
 
 Help / Documentation
 --------------------
