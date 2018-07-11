@@ -21,7 +21,9 @@ OldStarMesh(temp, rad, scale, pos):
     approach.
 xyplane(max_dist, grid_space):
     Returns a pythreejs Mesh and SurfaceGrid corresponding to the xy plane.
-axes(max_dist):
+axes(max_dist, axis_rad, axis_color):
+    Returns 3 pythreejs Mesh objects representing the x, y, and z axes..
+axes_line(max_dist):
     Returns a pythreejs Line object representing the XYZ axes.
 OrbitalInfo(mass1, mass2, a, e, phi, N):
     Returns orbital period, perihelion, aphelion, and Pandas dataframe time
@@ -370,7 +372,58 @@ def xyplane(max_dist, grid_space):
     return surf, surfgrid
 
 
-def axes(max_dist):
+def axes(max_dist, axis_rad=0.25, axis_color='yellow'):
+    """
+    Generate X, Y, Z axes of length max_width in the form of a pythreejs
+    Line object.
+
+    Parameters
+    ----------
+    max_dist : float
+                maximum extent of grid from origin in each dimension
+    axis_rad : float
+                radius of cylinder representing each axis (default: 0.25)
+    axis_color : color
+                color the axes are drawn in (default: 'yellow')
+
+    Returns
+    -------
+    Xaxis, Yaxis, Zaxis : pythreejs.Mesh*3
+            Three pythreejs Mesh objects representing the x, y, and z axes.
+    """
+    Xaxis = p3j.Mesh(geometry=p3j.CylinderBufferGeometry(radiusTop=axis_rad, radiusBottom=axis_rad, 
+                                                height=max_dist, 
+                                                radiusSegments=12, 
+                                                heightSegments=1, 
+                                                openEnded=False, 
+                                                thetaStart=0, thetaLength=2*np.pi), 
+                material=p3j.MeshBasicMaterial(color=axis_color),
+                position=[max_dist/2, 0, 0])
+    Xaxis.rotateZ(np.pi/2)
+    
+    Yaxis = p3j.Mesh(geometry=p3j.CylinderBufferGeometry(radiusTop=axis_rad, radiusBottom=axis_rad, 
+                                                height=max_dist, 
+                                                radiusSegments=12, 
+                                                heightSegments=1, 
+                                                openEnded=False, 
+                                                thetaStart=0, thetaLength=2*np.pi), 
+                material=p3j.MeshBasicMaterial(color=axis_color),
+                position=[0, max_dist/2, 0])
+    
+    Zaxis = p3j.Mesh(geometry=p3j.CylinderBufferGeometry(radiusTop=axis_rad, radiusBottom=axis_rad, 
+                                                height=max_dist, 
+                                                radiusSegments=12, 
+                                                heightSegments=1, 
+                                                openEnded=False, 
+                                                thetaStart=0, thetaLength=2*np.pi), 
+                material=p3j.MeshBasicMaterial(color=axis_color),
+                position=[0, 0, max_dist/2])
+    Zaxis.rotateX(np.pi/2)
+
+    return Xaxis, Yaxis, Zaxis
+
+
+def axes_lines(max_dist):
     """
     Generate X, Y, Z axes of length max_width in the form of a pythreejs
     Line object.
