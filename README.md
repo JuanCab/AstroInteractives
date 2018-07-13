@@ -52,7 +52,7 @@ which in turn depends on
 Known Issues
 ------------
 - Display of equations can lag, allowing underlying LaTeX to be visible briefly.
-- When run in Binder, some of the widgets are showing additional scrollbars.  We are working on addressing this.
+- When run in Apple's Safari web browser, the Binary Stars simulation is having display errors.  They are detailed here (https://github.com/JuanCab/AstroInteractives/issues/10).  We believe to be a bug in Safari and have reported to Apple.  A redesign may fix this in the near future.
 
 Help / Documentation
 --------------------
