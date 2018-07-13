@@ -21,6 +21,8 @@ OldStarMesh(temp, rad, scale, pos):
     approach.
 xyplane(max_dist, grid_space):
     Returns a pythreejs Mesh and SurfaceGrid corresponding to the xy plane.
+origin_marker(size, axis_rad, axis_color):
+    Returns 3 pythreejs Mesh objects marking the origin.
 axes(max_dist, axis_rad, axis_color):
     Returns 3 pythreejs Mesh objects representing the x, y, and z axes..
 axes_line(max_dist):
@@ -367,20 +369,71 @@ def xyplane(max_dist, grid_space):
     # To avoid overlap, lift grid slightly above the plane scaling
     # by size of grid
     surfgrid = p3j.SurfaceGrid(geometry=surf_g, material=grid_material,
-                               position=[0, 0, 1e-2*max_dist])
+                               position=[0, 0, 5e-3*max_dist])
 
     return surf, surfgrid
 
 
-def axes(max_dist, axis_rad=0.25, axis_color='yellow'):
+def origin_marker(size, axis_rad=0.25, axis_color='yellow'):
     """
-    Generate X, Y, Z axes of length max_width in the form of a pythreejs
+    Generate X, Y, Z cylinders of length size in the form of a pythreejs
     Line object.
 
     Parameters
     ----------
-    max_dist : float
+    size : float
                 maximum extent of grid from origin in each dimension
+    axis_rad : float
+                radius of cylinder representing each axis (default: 0.25)
+    axis_color : color
+                color the axes are drawn in (default: 'yellow')
+
+    Returns
+    -------
+    Xaxis, Yaxis, Zaxis : pythreejs.Mesh*3
+            Three pythreejs Mesh objects representing the x, y, and z axes.
+    """
+    Xaxis = p3j.Mesh(geometry=p3j.CylinderBufferGeometry(radiusTop=axis_rad, radiusBottom=axis_rad, 
+                                                height=size, 
+                                                radiusSegments=12, 
+                                                heightSegments=1, 
+                                                openEnded=False, 
+                                                thetaStart=0, thetaLength=2*np.pi), 
+                material=p3j.MeshBasicMaterial(color=axis_color),
+                position=[0, 0, 0])
+    Xaxis.rotateZ(np.pi/2)
+    
+    Yaxis = p3j.Mesh(geometry=p3j.CylinderBufferGeometry(radiusTop=axis_rad, radiusBottom=axis_rad, 
+                                                height=size, 
+                                                radiusSegments=12, 
+                                                heightSegments=1, 
+                                                openEnded=False, 
+                                                thetaStart=0, thetaLength=2*np.pi), 
+                material=p3j.MeshBasicMaterial(color=axis_color),
+                position=[0, 0, 0])
+    
+    Zaxis = p3j.Mesh(geometry=p3j.CylinderBufferGeometry(radiusTop=axis_rad, radiusBottom=axis_rad, 
+                                                height=size, 
+                                                radiusSegments=12, 
+                                                heightSegments=1, 
+                                                openEnded=False, 
+                                                thetaStart=0, thetaLength=2*np.pi), 
+                material=p3j.MeshBasicMaterial(color=axis_color),
+                position=[0, 0, 0])
+    Zaxis.rotateX(np.pi/2)
+
+    return Xaxis, Yaxis, Zaxis
+
+
+def axes(max_dist, axis_rad=0.25, axis_color='yellow'):
+    """
+    Generate cylinders of length max_width along the positive X, Y, and Z
+    axes in the form of a pythreejs Mesh objects.
+
+    Parameters
+    ----------
+    max_dist : float
+                maximum (positive) extent of axis from origin in each dimension
     axis_rad : float
                 radius of cylinder representing each axis (default: 0.25)
     axis_color : color
@@ -431,7 +484,7 @@ def axes_lines(max_dist):
     Parameters
     ----------
     max_dist : float
-                maximum extent of grid from origin in each dimension
+                maximum (positive) extent of axis from origin in each dimension
 
     Returns
     -------
