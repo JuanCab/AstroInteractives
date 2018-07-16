@@ -362,7 +362,7 @@ def xyplane(max_dist, grid_space):
                                  width_segments=nx-1,
                                  height_segments=ny-1)
     surface_material = p3j.MeshBasicMaterial(color='darkslategrey',
-                                             transparent=True, opacity=0.5)
+                                             transparent=True, opacity=0.3)
     surf = p3j.Mesh(geometry=surf_g, material=surface_material)
     grid_material = p3j.LineBasicMaterial(color='grey')
 
