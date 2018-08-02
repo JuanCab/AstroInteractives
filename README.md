@@ -34,14 +34,14 @@ The currently available Jupyter Notebooks (in no particular order) are the follo
 
 ### Dependencies
 
-These Jupyter notebooks require a `jupyter notebook` installation as well as the following python packages:
+These Jupyter notebooks require a `jupyter` server installation as well as the following python packages:
 
 - `ipywidgets` (version >= 7.2.0)
 - `bqplot`
 - `pythreejs` (version >= 1.0.0)
 - `appmode` (This allows the Jupyter notebook to run as an app)
 
-which in turn depends on
+which in turn depend on
 
 - `traitlets` (version >= 4.3.0)
 - `traittypes`
@@ -52,7 +52,6 @@ which in turn depends on
 Known Issues
 ------------
 - Display of equations can lag, allowing underlying LaTeX to be visible briefly.
-- When run in Apple's Safari web browser, the Binary Stars simulation is having display errors.  They are detailed here (https://github.com/JuanCab/AstroInteractives/issues/10).  We believe to be a bug in Safari and have reported to Apple.  A redesign may fix this in the near future.
 
 Help / Documentation
 --------------------
