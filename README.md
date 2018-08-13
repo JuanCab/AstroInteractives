@@ -33,6 +33,7 @@ The currently available Jupyter Notebooks (in no particular order) are the follo
 6. [HR Diagram Interactive](Interactives/HR_Diagram.ipynb) - This set of interactive graphics allows a student to explore the data that goes into the HR diagram, then how main sequence fitting can be used to determine the distance to a star cluster, and finally, how detailed stellar evolution models can be used to also determine the age of a star cluster.  **Note:** This notebook uses all "real data" with the exception of the fact that to show a brightness diagram corresponding to an HR diagram, the distances (and corresponding brightnesses) were 'assigned.'
 7. [Doppler Shift Interactive](Interactives/DopplerShift.ipynb) - This *beta* version of a Doppler Shift interactive is designed to allow students to see the motion of the star/planet inducing the doppler shift as well as relateding the observed doppler shift of the spectral lines to the motion of the central star in response to the orbiting object.
 8. [Small Angle Equation Interactive](Interactives/SmallAngleEquation.ipynb) - This interactive was designed to allow students who are uncomfortable with mathematics visualize what is happening when the small angle equation is valid.
+9. [Flux vs.Luminosity](Interactives/FluxVsLuminositySimulation/ipynb) - This interactive is meant to be used in discussions of the concept of flux/brightness versus luminosity.
 
 ### Dependencies
 
@@ -53,7 +54,7 @@ which in turn depend on
 
 Known Issues
 ------------
-- Display of equations can lag, allowing underlying LaTeX to be visible briefly.
+- In some interactives, the animations are buffered by the web browser so that they lag behind the user inputs.  Efforts have been made to optimize the code to avoid these problems.
 
 Help / Documentation
 --------------------

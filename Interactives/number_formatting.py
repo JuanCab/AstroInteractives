@@ -7,8 +7,8 @@ This library containsfunctions for format numbers into various useful formats.
 
 Functions included
 ------------------
-exp2LaTeX(num, sig_fig=2):
-    Converts number into scientific notation string (and LaTeX string).
+exp2HTML(num, sig_fig=2):
+    Converts number into scientific notation string (and HTML string).
 SigFig(num, sig_fig=2):
     Rounds a number into a set number of significant figures.
 
@@ -48,68 +48,26 @@ def exp2LaTeX(num, sig_fig=2):
     """
 
     if type(num) == str and not(num.isdigit()):
-        print("Invalid input")
+        TypeError("Invalid input num, must be a float or integer")
     else:
         num = float(num)
 
-    if 'e' in str(num):
-        num = str(num)
-        stop = num.find("e")
-        if '+' in num:
-            start = num.rfind("+")+1
-        elif '-' in num:
-            start = num.rfind('-')
-        else:
-            start = num.rfind('e')+1
-        base = num[:stop]
-        power = num[start:]
-        if len(base) >= sig_fig:
-            base = ('{'+':'+'.'+str(sig_fig-1)+'f'+'}').format(float(base))
-        new_num = base + ' * 10^' + power
-        new_num_LaTeX = base + ' \\times 10^{' + power + '}'
-    elif num >= 100000.0:
-        num = str(num)
-        stop = len(num) - 1
-        base = num[0] + '.' + num[1:num.find('.')] + num[num.find('.')+1:]
-        power = str(len(num[1:num.find('.')]))
-        if len(base)-1 >= sig_fig:
-            base = ('{'+':'+'.'+str(sig_fig-1)+'f'+'}').format(float(base))
-        new_num = base + ' * 10^' + power
-        new_num_LaTeX = base + ' \\times 10^{' + power + '}'
-    elif num < 1:
-        if num == 0:
-            new_num = str(num)
-        else:
-            num2 = str(num)
-            i = 2
-            while num2[i] == '0':
-                i += 1
-            start = i
-            if len(num2[start:]) <= sig_fig:
-                if len(num2[start:]) == sig_fig:
-                    new_num = num2[:start+sig_fig]
-                else:
-                    new_num = num2
-            elif num2[start+sig_fig] >= '5':
-                new_num = num2[:start+1] + str(int(num2[start+(sig_fig-1)])+1)
-            else:
-                new_num = num2[:start+sig_fig]
-        new_num_LaTeX = new_num
-    else:
-        num2 = str(num)
-        if len(num2[:num2.find('.')]) > sig_fig:
-            length = len(num2[:num2.find('.')])
-            new_num = str(int(round(num, -(length-sig_fig))))
-        elif len(num2[:num2.find('.')]) == sig_fig:
-            new_num = ('{:.0f}').format(num)
+    if ((abs(num) < 1e-3) or (abs(num) >= 100000.0)):
+        # Write out in scientific notation
+        power = int(np.floor(np.log10(abs(num))))
+        base = str(SigFig(num/pow(10, power), sig_fig))
 
-        else:
-            if len(num2) - 1 >= sig_fig:
-                new_num = ('{'+':'+'.'+str(sig_fig-len(num2[:num2.find('.')]))+'f'+'}').format(num)
-            else:
-                new_num = num2
+        # Generate output
+        new_num = base + ' * 10^' + str(power)
+        new_num_LaTeX = base + ' \\times 10^{' + str(power) + '}'
+        new_num_HTML = base + ' &times; 10<sup>' + str(power) + '</sup>'
+    else:
+        # Don't bother with scientific notation
+        new_num = str(SigFig(num, sig_fig))
         new_num_LaTeX = new_num
-    return [new_num, new_num_LaTeX]
+        new_num_HTML = new_num
+        
+    return [new_num, new_num_LaTeX, new_num_HTML]
 
 
 def SigFig(num, sig_fig=2):
@@ -132,6 +90,11 @@ def SigFig(num, sig_fig=2):
                figures.
     """
 
+    if type(num) == str and not(num.isdigit()):
+        TypeError("Invalid input num, must be a float or integer")
+    else:
+        num = float(num)
+        
     # Confirm sig_fig value acceptable
     if (sig_fig < 1):
         sig_fig = 2
@@ -150,12 +113,14 @@ def SigFig(num, sig_fig=2):
 
     # Create the format string for the coeff
     format_str = "{0:."+str(int(sig_fig-1))+"f}"
-
     new_num = float(format_str.format(coeff))*order
 
     if ((exponent > 13) or (exponent < -13)):
+        # Returns scientific notation
         return float(new_num)
     elif (sig_fig <= exponent):
         return int(new_num)
+    elif (exponent < 0):
+        return float(round(new_num, sig_fig+int(abs(exponent))))
     else:
         return float(new_num)
