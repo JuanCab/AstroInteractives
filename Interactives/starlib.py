@@ -723,13 +723,15 @@ class BinaryStarModel(traitlets.HasTraits):
             raise traitlets.TraitError('incl must be in range 0 to 90')
         return test_incl
 
-    @traitlets.observe('mass1', 'mass2', 'a', 'e', 'phi', 'N')
+    @traitlets.observe('mass1', 'mass2', 'rad1', 'rad2', 'a', 'e', 'phi', 'N')
     def _refresh_orbit_model(self, change):
         # Method to call when any variable affecting orbit is called.  Since
         # the orbit change would affect light curves and radial velocity
         # curves, those are checked as well.
         # Update orbit if set to update continuously, update model(s), then
         # indcate updated, if not, set attribute to indicate not up to date
+        # 
+        # Radius is included here because it can affect if the stars collide.
         if ((self.continuous_update) and (change['new'] != change['old'])):
             self.set_orbital_info()
             # Update radial velocity curve (since orbit change affects it)
@@ -759,7 +761,7 @@ class BinaryStarModel(traitlets.HasTraits):
         else:
             self.up_to_date = False
 
-    @traitlets.observe('rad1', 'rad2', 'temp1', 'temp2', 'Na', 'Ntheta')
+    @traitlets.observe('temp1', 'temp2', 'Na', 'Ntheta')
     def _refresh_only_lc_models(self, change):
         # Method to call when any attribute affecting only the light curve
         # model is changed.
@@ -771,6 +773,10 @@ class BinaryStarModel(traitlets.HasTraits):
         else:
             self.up_to_date = False
 
+        # Increment the number of models run since temp affect
+        # appearance of model
+        self.mdl_counter += 1
+
     ##
     # Define Methods
     ##
@@ -781,7 +787,7 @@ class BinaryStarModel(traitlets.HasTraits):
         """
         # Update orbital information
         self.set_orbital_info()
-        
+
         # Update radial velocity curve (since orbit change affects it)
         if (self.radvel_info is not None):
             self.set_radvel_info()
@@ -791,7 +797,7 @@ class BinaryStarModel(traitlets.HasTraits):
             self.set_lc_info()
 
         self.up_to_date = True
-        
+
     def set_orbital_info(self):
         """
         Assigns values for various parameters based on orbital model.  Allows
@@ -1488,7 +1494,7 @@ class BinaryStarViewer(traitlets.HasTraits):
         called.
         '''
         self.temp1 = self.bsm.temp1
-        self.temp2 = self.bsm.temp1
+        self.temp2 = self.bsm.temp2
         self.radius1 = self.bsm.rad1
         self.radius2 = self.bsm.rad2
         self.incl = self.bsm.incl
@@ -1499,7 +1505,7 @@ class BinaryStarViewer(traitlets.HasTraits):
         self.orbit_info['y1_RSun'] = self.bsm.orbit_info['y1']*self._AU2RSun
         self.orbit_info['x2_RSun'] = self.bsm.orbit_info['x2']*self._AU2RSun
         self.orbit_info['y2_RSun'] = self.bsm.orbit_info['y2']*self._AU2RSun
-        
+
     def _grid_setup(self, maxdist, update_pos=True):
         '''
         Set the grid separation based on the aphelion distance.
