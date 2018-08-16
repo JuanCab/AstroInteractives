@@ -730,7 +730,7 @@ class BinaryStarModel(traitlets.HasTraits):
         # curves, those are checked as well.
         # Update orbit if set to update continuously, update model(s), then
         # indcate updated, if not, set attribute to indicate not up to date
-        # 
+        #
         # Radius is included here because it can affect if the stars collide.
         if ((self.continuous_update) and (change['new'] != change['old'])):
             self.set_orbital_info()
@@ -1075,7 +1075,8 @@ class BinaryStarModel(traitlets.HasTraits):
         """
 
         # Create dataframe with 100% of flux visible at all times
-        LightCurveInfo = pd.DataFrame(columns=['time', 'phase', 'F_norm'])
+        LightCurveInfo = pd.DataFrame(columns=['time', 'phase', 'F_norm',
+                                               'in_front'])
         LightCurveInfo['time'] = orbit_info['time']
         LightCurveInfo['phase'] = (orbit_info['time'] /
                                    float(orbit_info['time'][-1:]))
@@ -1149,6 +1150,7 @@ class BinaryStarModel(traitlets.HasTraits):
                 # Hold positions of foreground and background stars
                 ypf, zpf = yp1[t_idx], zp1[t_idx]
                 ypb, zpb = yp2[t_idx], zp2[t_idx]
+                in_front = 1
             else:  # Star 2 in front, star 1 eclipsed
                 F = F2  # Start with flux of star 2
                 # Get information on flux distribution in star 1
@@ -1158,11 +1160,13 @@ class BinaryStarModel(traitlets.HasTraits):
                 # Hold positions of foreground and background stars
                 ypf, zpf = yp2[t_idx], zp2[t_idx]
                 ypb, zpb = yp1[t_idx], zp1[t_idx]
+                in_front = 2
 
             # If completely eclipsed, save flux of foreground star and skip
             # the computation
             if (dist + Rb < Rf):
                 LightCurveInfo['F_norm'][t_idx] = F / F_tot
+                LightCurveInfo['in_front'][t_idx] = in_front
                 continue
 
             # Determine radii for computations of obscured background disk
@@ -1194,6 +1198,7 @@ class BinaryStarModel(traitlets.HasTraits):
             # Add the visible flux from the background star and save the flux
             F += np.sum(dF*visible)
             LightCurveInfo['F_norm'][t_idx] = F / F_tot
+            LightCurveInfo['in_front'][t_idx] = in_front
 
         return LightCurveInfo
 
@@ -1370,6 +1375,13 @@ class BinaryStarViewer(traitlets.HasTraits):
          width of Render object in pixels (default: 600)
     view_height : int
          height of Render object in pixels (default: 600)
+    lock_scale : Boolean
+         If true, the scale is locked to render to scale and not increase size
+         of objects.
+
+    multiplier: float
+         If this is greater than 1, the stars are being increased in size and
+         not to scale.
     """
 
     # Define your traits here, as class attributes, using mdl_counter
@@ -1380,6 +1392,7 @@ class BinaryStarViewer(traitlets.HasTraits):
     temp1 = traitlets.Float(allow_none=True)
     temp2 = traitlets.Float(allow_none=True)
     incl = traitlets.Float(allow_none=True)
+    lock_scale = traitlets.Bool(allow_none=True)
     mdl_counter = traitlets.Integer(allow_none=True)
     _initialized = False
 
@@ -1387,7 +1400,7 @@ class BinaryStarViewer(traitlets.HasTraits):
     _AU2RSun = AU/R_Sun
 
     def __init__(self, bsm, t_idx0=0, draw_grid=True, draw_orbits=True,
-                 view_width=600, view_height=600):
+                 lock_scale=False, view_width=600, view_height=600):
         ##
         # Need the orbital model be input as a widget.
         ##
@@ -1398,9 +1411,11 @@ class BinaryStarViewer(traitlets.HasTraits):
         # Initialize some variables
         self.t_idx = t_idx0
         self._view_factor = 1.25  # Place viewer this many times max distance
-        self.multiplier = 1   # Increase size of the stars by this factor
+        self.minratio = 50    # Minimum ratio between size of objects and xmax
         self.draw_grid = draw_grid
         self.draw_orbits = draw_orbits
+        self.lock_scale = lock_scale
+        self.multiplier = 1   # Increase size of the stars by this factor
 
         # Grab values from BinaryStarModel (bsm) and convert positions into
         # Solar radii and store those values in DataFrame
@@ -1410,6 +1425,29 @@ class BinaryStarViewer(traitlets.HasTraits):
         # Save initial radius to scale all other radii to this
         self._init_rad1 = bsm.rad1
         self._init_rad2 = bsm.rad2
+
+        # Initialize a flat surface to contain orbital plane (accounting for
+        # size of orbital plane + star radius)
+        maxdist = self.bsm.maxrad*self._AU2RSun + max(self.radius1,
+                                                      self.radius2)
+        (self._xmax, self._grid_step) = self._grid_setup(maxdist,
+                                                         update_pos=False)
+
+        # Rescales the multiplier so that stars are rendered larger-than-scale
+        # if view area becomes too large while avoiding having the stars
+        # overlap
+        if (self.lock_scale):
+            self.multiplier = 1
+        else:
+            if ((self.minratio*min(self.radius1, self.radius2) < self._xmax)
+                and (self.minratio*max(self.radius1, self.radius2) <
+                     self.bsm.aa*self._AU2RSun)):
+                self.multiplier = (self._xmax /
+                                   (self.minratio *
+                                    min(self.radius1, self.radius2)))
+            else:
+                self.multiplier = 1
+
         # Set up the scales based on initial radii
         sc1x = self.multiplier*self.radius1/self._init_rad1
         sc2x = self.multiplier*self.radius2/self._init_rad2
@@ -1423,13 +1461,6 @@ class BinaryStarViewer(traitlets.HasTraits):
         self._star2 = StarMesh(self.temp2, self.radius2, self._scale2,
                                [bsm.orbit_info['x2_RSun'][self.t_idx],
                                 bsm.orbit_info['y2_RSun'][self.t_idx], 0])
-
-        # Initialize a flat surface to contain orbital plane (accounting for
-        # size of orbital plane + star radius)
-        maxdist = self.bsm.maxrad*self._AU2RSun + max(self.radius1,
-                                                      self.radius2)
-        (self._xmax, self._grid_step) = self._grid_setup(maxdist,
-                                                         update_pos=False)
 
         # Generate flat surface and grid for perspective
         if (self.draw_grid):
@@ -1617,7 +1648,8 @@ class BinaryStarViewer(traitlets.HasTraits):
                                     self.orbit_info['y2_RSun'][self.t_idx],
                                     0]
 
-    @traitlets.observe('radius1', 'radius2', 'temp1', 'temp2', 'incl')
+    @traitlets.observe('radius1', 'radius2', 'temp1', 'temp2', 'incl',
+                       'lock_scale')
     def _update_appearance(self, change):
         # Update only if entire object has been initialized
         if (self._initialized):
@@ -1637,17 +1669,20 @@ class BinaryStarViewer(traitlets.HasTraits):
                 self._surf.geometry = self._surf_new.geometry
                 self._surfgrid.children = self._surfgrid_new.children
 
-            # updates the radii and color of each star, it also rescales the
-            # multiplier so that stars are rendered larger-than-scale if view
-            # area becomes too large while avoiding having the stars overlap
-            minratio = 50
-            if ((minratio*min(self.radius1, self.radius2) < self._xmax) and
-               (minratio*max(self.radius1, self.radius2) <
-               self.bsm.aa*self._AU2RSun)):
-                self.multiplier = (self._xmax /
-                                   (minratio*min(self.radius1, self.radius2)))
-            else:
+            # Rescales the multiplier so that stars are rendered
+            # larger-than-scale if view area becomes too large while avoiding
+            # having the stars overlap
+            if (self.lock_scale):
                 self.multiplier = 1
+            else:
+                if ((self.minratio*min(self.radius1, self.radius2) < self._xmax)
+                    and (self.minratio*max(self.radius1, self.radius2) <
+                         self.bsm.aa*self._AU2RSun)):
+                    self.multiplier = (self._xmax /
+                                       (self.minratio *
+                                        min(self.radius1, self.radius2)))
+                else:
+                    self.multiplier = 1
 
             # update scale of stars
             sc1x = self.multiplier*self.radius1/self._init_rad1

@@ -17,25 +17,34 @@ Goals
 Getting Started
 ---------------
 
-### Try it online with [Binder](http://mybinder.org/)
+### Try it online with [Binder](http://mybinder.org/) by clicking the button below
 
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/JuanCab/AstroInteractives/master?filepath=index.ipynb)
 
-### Available Notebooks
 
+Available Notebooks
+-------------------
 The currently available Interactives are the following:
 
-1. [Radioactive Decay Interactives](Interactives/Radioactivity.ipynb)  - This pair of interactive plots is used to illustrate the concept of radioactive decay, half-life, and how these concepts can be used to determine the age of some rocks via the geochron method.
-2. [Center of Mass Interactive](Interactives/Center_of_Mass.ipynb) - This interactive model simply allows a student to adjust the mass and separation of two stars and see the shifts om their orbits, illustrating the center of mass position.
-3. [Binary Star Simulation Interactive](Interactives/Binary_Star_Sim.ipynb) -  This interactive contains a full 3D simulation of a binary star system, including a radial velocity or light curve for that system.  The user can control most physical parameters of the system.
-4. [Luminosity Calculator Interactive](Interactives/LuminosityCalculator.ipynb)  - This interactive is used to illustrate to students how the radius and temperature of a star affect its luminosity.  The colors of the stars accurately correspond to the temperature, but the stars produced might not have radii and temperatures that correspond to real stars.
-5. [Blackbody Spectra Interactives](Interactives/Blackbody_Simulation.ipynb) - This set of interactive figures can be used to explore the properties of the Blackbody spectrum as applied to stars.  
-6. [HR Diagram Interactives](Interactives/HR_Diagram.ipynb) - This set of interactive plots allows a student to explore the data that goes into the HR diagram, then how main sequence fitting can be used to determine the distance to a star cluster, and finally, how detailed stellar evolution models can be used to also determine the age of a star cluster.
-7. [Doppler Shift Interactive](Interactives/DopplerShift.ipynb) - This *beta* version of a Doppler Shift interactive is designed to allow students to see the motion of the star/planet inducing the doppler shift as well as relateding the observed doppler shift of the spectral lines to the motion of the central star in response to the orbiting object.
-8. [Small Angle Approximation Interactive](Interactives/SmallAngleEquation.ipynb) - This interactive was designed to allow students who are uncomfortable with mathematics visualize what is happening when the small angle approximation is valid.
-9. [Flux vs.Luminosity Interactive](Interactives/FluxVsLuminositySimulation.ipynb) - This interactive is meant to be used in discussions of the concepts of flux/brightness, luminosity, and the inverse square law.
+#### General Astronomy
+1. [Small Angle Approximation Interactive](Interactives/SmallAngleEquation.ipynb) - This interactive was designed to allow students who are uncomfortable with mathematics visualize what is happening when the small angle approximation is valid.
+2. [Flux vs.Luminosity Interactive](Interactives/FluxVsLuminositySimulation.ipynb) - This interactive is meant to be used in discussions of the concepts of flux/brightness, luminosity, and the inverse square law.
+3. [Doppler Shift Interactive](Interactives/DopplerShift.ipynb) - This *beta* version of a Doppler Shift interactive is designed to allow students to see the motion of the star/planet inducing the doppler shift as well as relateding the observed doppler shift of the spectral lines to the motion of the central star in response to the orbiting object.
 
-### Dependencies
+#### Solar System and Planetary Astronomy
+1. [Radioactive Decay Interactives](Interactives/Radioactivity.ipynb)  - This pair of interactive plots is used to illustrate the concept of radioactive decay, half-life, and how these concepts can be used to determine the age of some rocks via the geochron method.
+2. [Exoplanet System Simulation Interactive](Interactives/Exoplanet_Sim.ipynb) -  This interactive contains a full 3D simulation of a star system containing a single Jovian exoplanet, including a radial velocity or light curve for that system.  **NOTE**: Currently the light curve computation is NOT working accurately.
+
+#### Stellar Astronomy
+1. [Center of Mass Interactive](Interactives/Center_of_Mass.ipynb) - This interactive model simply allows a student to adjust the mass and separation of two stars and see the shifts om their orbits, illustrating the center of mass position.
+2. [Binary Star Simulation Interactive](Interactives/Binary_Star_Sim.ipynb) -  This interactive contains a full 3D simulation of a binary star system, including a radial velocity or light curve for that system.  The user can control most physical parameters of the system.
+3. [Luminosity Calculator Interactive](Interactives/LuminosityCalculator.ipynb)  - This interactive is used to illustrate to students how the radius and temperature of a star affect its luminosity.  The colors of the stars accurately correspond to the temperature, but the stars produced might not have radii and temperatures that correspond to real stars.
+4. [Blackbody Spectra Interactives](Interactives/Blackbody_Simulation.ipynb) - This set of interactive figures can be used to explore the properties of the Blackbody spectrum as applied to stars.  
+5. [HR Diagram Interactives](Interactives/HR_Diagram.ipynb) - This set of interactive plots allows a student to explore the data that goes into the HR diagram, then how main sequence fitting can be used to determine the distance to a star cluster, and finally, how detailed stellar evolution models can be used to also determine the age of a star cluster.
+
+
+Dependencies
+------------
 
 These Jupyter notebooks require a `jupyter` server installation as well as the following python packages:
 
