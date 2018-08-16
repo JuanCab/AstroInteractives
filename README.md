@@ -33,7 +33,7 @@ The currently available Interactives are the following:
 
 #### Solar System and Planetary Astronomy
 1. [Radioactive Decay Interactives](Interactives/Radioactivity.ipynb)  - This pair of interactive plots is used to illustrate the concept of radioactive decay, half-life, and how these concepts can be used to determine the age of some rocks via the geochron method.
-2. [Exoplanet System Simulation Interactive](Interactives/Exoplanet_Sim.ipynb) -  This interactive contains a full 3D simulation of a star system containing a single Jovian exoplanet, including a radial velocity or light curve for that system.  **NOTE**: Currently the light curve computation is NOT working accurately.
+2. [Exoplanet System Simulation Interactive](Interactives/Exoplanet_Sim.ipynb) -  This interactive contains a full 3D simulation of a star system containing a single Jovian exoplanet, including a radial velocity or light curve for that system. 
 
 #### Stellar Astronomy
 1. [Center of Mass Interactive](Interactives/Center_of_Mass.ipynb) - This interactive model simply allows a student to adjust the mass and separation of two stars and see the shifts om their orbits, illustrating the center of mass position.
