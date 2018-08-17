@@ -633,7 +633,7 @@ class BinaryStarModel(traitlets.HasTraits):
 
         # Initialize radial velocity and light curves info as blank
         self.radvel_info = None
-        self.lightcurve_info = None
+        self.lc_info = None
 
         # Process variables without setters/getters
         self.mass1 = float(mass1)
@@ -739,7 +739,7 @@ class BinaryStarModel(traitlets.HasTraits):
                 self.set_radvel_info()
 
             # Update light curve data (since orbit change affects it)
-            if (self.lightcurve_info is not None):
+            if (self.lc_info is not None):
                 self.set_lc_info()
 
             self.up_to_date = True
@@ -751,11 +751,10 @@ class BinaryStarModel(traitlets.HasTraits):
         # Method to call when variables affecting the radial velocity
         # model (and thus the light curve model) get called.
         if ((self.continuous_update) and (change['new'] != change['old'])):
-            # Revise values of radvel_info and lightcurve_info if set
+            # Revise values of radvel_info and lc_info if set
             if (self.radvel_info is not None):
                 self.set_radvel_info()
-            if ((change['name'] != 'rv_sys') and
-               (self.lightcurve_info is not None)):
+            if ((change['name'] != 'rv_sys') and (self.lc_info is not None)):
                 self.set_lc_info()
             self.up_to_date = True
         else:
@@ -766,8 +765,8 @@ class BinaryStarModel(traitlets.HasTraits):
         # Method to call when any attribute affecting only the light curve
         # model is changed.
         if ((self.continuous_update) and (change['new'] != change['old'])):
-            # Revise values of radvel_info and lightcurve_info if set
-            if (self.lightcurve_info is not None):
+            # Revise values of radvel_info and lc_info if set
+            if (self.lc_info is not None):
                 self.set_lc_info()
             self.up_to_date = True
         else:
@@ -793,7 +792,7 @@ class BinaryStarModel(traitlets.HasTraits):
             self.set_radvel_info()
 
         # Update light curve data (since orbit change affects it)
-        if (self.lightcurve_info is not None):
+        if (self.lc_info is not None):
             self.set_lc_info()
 
         self.up_to_date = True
@@ -1392,6 +1391,8 @@ class BinaryStarViewer(traitlets.HasTraits):
     temp1 = traitlets.Float(allow_none=True)
     temp2 = traitlets.Float(allow_none=True)
     incl = traitlets.Float(allow_none=True)
+    draw_grid = traitlets.Bool(allow_none=True)
+    draw_orbits = traitlets.Bool(allow_none=True)
     lock_scale = traitlets.Bool(allow_none=True)
     mdl_counter = traitlets.Integer(allow_none=True)
     _initialized = False
@@ -1400,7 +1401,8 @@ class BinaryStarViewer(traitlets.HasTraits):
     _AU2RSun = AU/R_Sun
 
     def __init__(self, bsm, t_idx0=0, draw_grid=True, draw_orbits=True,
-                 lock_scale=False, view_width=600, view_height=600):
+                 lock_scale=False, enable_zoom=False,
+                 view_width=600, view_height=600):
         ##
         # Need the orbital model be input as a widget.
         ##
@@ -1415,6 +1417,7 @@ class BinaryStarViewer(traitlets.HasTraits):
         self.draw_grid = draw_grid
         self.draw_orbits = draw_orbits
         self.lock_scale = lock_scale
+        self.enable_zoom = enable_zoom
         self.multiplier = 1   # Increase size of the stars by this factor
 
         # Grab values from BinaryStarModel (bsm) and convert positions into
@@ -1462,25 +1465,11 @@ class BinaryStarViewer(traitlets.HasTraits):
                                [bsm.orbit_info['x2_RSun'][self.t_idx],
                                 bsm.orbit_info['y2_RSun'][self.t_idx], 0])
 
-        # Generate flat surface and grid for perspective
-        if (self.draw_grid):
-            self._surf, self._surfgrid = xyplane(self._xmax, self._grid_step)
-
         # Set up the viewing distance
         self._view_dist = self._view_factor*self._xmax
 
-        # Construct lines representing stars' orbits
-        if (self.draw_orbits):
-            (self._orbit1_line, self._orbit2_line) = self._draw_orbits_RSun()
-
-        # Makes the scene environment
-        the_kids = [self._star1, self._star2]
-        if (self.draw_grid):
-            the_kids.extend([self._surfgrid, self._surf])
-        if (self.draw_orbits):
-            the_kids.extend([self._orbit1_line, self._orbit2_line])
-
-        self._bsm_scene = p3j.Scene(children=the_kids, background='black')
+        # Generate the scene
+        self._bsm_scene = self._create_scene()
 
         # Define initial viewing position
         rad_angle = self.incl*deg2rad
@@ -1504,9 +1493,9 @@ class BinaryStarViewer(traitlets.HasTraits):
 
         # Makes a controller for the starcam camera looking toward the origin
         self._controller = p3j.OrbitControls(controlling=self._starcam,
-                                             autoRotate=True,
+                                             autoRotate=False,
                                              enableRotate=False,
-                                             enableZoom=False,
+                                             enableZoom=self.enable_zoom,
                                              target=[0, 0, 0])
 
         # creates the object that gets displayed to the screen
@@ -1572,7 +1561,11 @@ class BinaryStarViewer(traitlets.HasTraits):
                                          vertexColors='VertexColors')
 
         # Build Line object for star 1 orbit (to hover above plane)
-        star1orbit = 1e-2*self._xmax*np.ones((N, 3))
+        if (self.incl > 80):
+            offset_factor = 1e-3
+        else:
+            offset_factor = 5e-3
+        star1orbit = offset_factor*self._xmax*np.ones((N, 3))
         star1orbit[:, 0] = self.orbit_info['x1_RSun']
         star1orbit[:, 1] = self.orbit_info['y1_RSun']
         vertices1 = star1orbit.tolist()
@@ -1580,7 +1573,7 @@ class BinaryStarViewer(traitlets.HasTraits):
         orbit1_line = p3j.Line(geometry=orbit1_geom, material=line_mat)
 
         # Build Line object for star 2 orbit (to hover above plane)
-        star2orbit = 1e-2*self._xmax*np.ones((N, 3))
+        star2orbit = offset_factor*self._xmax*np.ones((N, 3))
         star2orbit[:, 0] = self.orbit_info['x2_RSun']
         star2orbit[:, 1] = self.orbit_info['y2_RSun']
         vertices2 = star2orbit.tolist()
@@ -1698,6 +1691,29 @@ class BinaryStarViewer(traitlets.HasTraits):
 
             # Move the camera (and adjust view if necessary)
             self._camera_update()
+
+    def reset_grid_and_orbit(self):
+        # This function is meant to be called from outside when the
+        # flag on drawing the grid or orbit is changed.
+        self.renderer.scene = self._create_scene()
+ 
+    def _create_scene(self):
+        # Generate flat surface and grid for perspective
+        if (self.draw_grid):
+            self._surf, self._surfgrid = xyplane(self._xmax, self._grid_step)
+
+        # Construct lines representing stars' orbits
+        if (self.draw_orbits):
+            (self._orbit1_line, self._orbit2_line) = self._draw_orbits_RSun()
+
+        # Makes the scene environment
+        the_kids = [self._star1, self._star2]
+        if (self.draw_grid):
+            the_kids.extend([self._surfgrid, self._surf])
+        if (self.draw_orbits):
+            the_kids.extend([self._orbit1_line, self._orbit2_line])
+
+        return p3j.Scene(children=the_kids, background='black')
 
     def _camera_update(self):
         '''
