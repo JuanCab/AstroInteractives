@@ -29,7 +29,7 @@ The currently available Interactives are the following:
 #### General Astronomy
 1. [Small Angle Approximation Interactive](Interactives/SmallAngleEquation.ipynb) - This interactive was designed to allow students who are uncomfortable with mathematics visualize what is happening when the small angle approximation is valid.
 2. [Flux vs.Luminosity Interactive](Interactives/FluxVsLuminositySimulation.ipynb) - This interactive is meant to be used in discussions of the concepts of flux/brightness, luminosity, and the inverse square law.
-3. [Doppler Shift Interactive](Interactives/DopplerShift.ipynb) - This *beta* version of a Doppler Shift interactive is designed to allow students to see the motion of the star/planet inducing the doppler shift as well as relateding the observed doppler shift of the spectral lines to the motion of the central star in response to the orbiting object.
+3. [Doppler Shift Interactives](Interactives/DopplerShift.ipynb) - These Doppler Shift interactives are designed to allow students to first model simple Doppler Shift and then to model the more complicated time-varying Doppler Shift seen in binary star and exoplanetary systems.
 
 #### Solar System and Planetary Astronomy
 1. [Radioactive Decay Interactives](Interactives/Radioactivity.ipynb)  - This pair of interactive plots is used to illustrate the concept of radioactive decay, half-life, and how these concepts can be used to determine the age of some rocks via the geochron method.
