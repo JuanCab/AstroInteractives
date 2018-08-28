@@ -36,7 +36,7 @@ The currently available Interactives are the following:
 2. [Exoplanet System Simulation Interactive](Interactives/Exoplanet_Sim.ipynb) -  This interactive contains a full 3D simulation of a star system containing a single Jovian exoplanet, including a radial velocity or light curve for that system. 
 
 #### Stellar Astronomy
-1. [Center of Mass Interactive](Interactives/Center_of_Mass.ipynb) - This interactive model simply allows a student to adjust the mass and separation of two stars and see the shifts om their orbits, illustrating the center of mass position.
+1. [Center of Mass Interactive](Interactives/Center_of_Mass.ipynb) - This interactive model simply allows a student to adjust the mass and separation of two stars and see the shifts of their orbits, illustrating the center of mass position.
 2. [Binary Star Simulation Interactive](Interactives/Binary_Star_Sim.ipynb) -  This interactive contains a full 3D simulation of a binary star system, including a radial velocity or light curve for that system.  The user can control most physical parameters of the system.
 3. [Luminosity Calculator Interactive](Interactives/LuminosityCalculator.ipynb)  - This interactive is used to illustrate to students how the radius and temperature of a star affect its luminosity.  The colors of the stars accurately correspond to the temperature, but the stars produced might not have radii and temperatures that correspond to real stars.
 4. [Blackbody Spectra Interactives](Interactives/Blackbody_Simulation.ipynb) - This set of interactive figures can be used to explore the properties of the Blackbody spectrum as applied to stars.  
