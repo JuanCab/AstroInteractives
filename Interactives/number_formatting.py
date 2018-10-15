@@ -52,6 +52,11 @@ def exp2LaTeX(num, sig_fig=2):
     else:
         num = float(num)
 
+    # Return zero if that is the value
+    if (num == 0):
+        return [0, '0', '0']
+
+    # Now deal with non-zero results
     if ((abs(num) < 1e-3) or (abs(num) >= 100000.0)):
         # Write out in scientific notation
         power = int(np.floor(np.log10(abs(num))))
