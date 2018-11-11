@@ -371,10 +371,12 @@ def xyplane(max_dist, grid_space):
                                  height=2*xmax,
                                  width_segments=nx-1,
                                  height_segments=ny-1)
-    surface_material = p3j.MeshBasicMaterial(color='darkslategrey',
+    # Color '#2F4F4F' also known as 'darkslategrey'
+    surface_material = p3j.MeshBasicMaterial(color='#2F4F4F',
                                              transparent=True, opacity=0.3)
     surf = p3j.Mesh(geometry=surf_g, material=surface_material)
-    grid_material = p3j.LineBasicMaterial(color='grey')
+    # Color '#808080' also known as 'grey'
+    grid_material = p3j.LineBasicMaterial(color='#808080')
 
     # To avoid overlap, lift grid slightly above the plane scaling
     # by size of grid
@@ -384,7 +386,7 @@ def xyplane(max_dist, grid_space):
     return surf, surfgrid
 
 
-def origin_marker(size, axis_rad=0.25, axis_color='yellow'):
+def origin_marker(size, axis_rad=0.25, axis_color='#FFFF00'):
     """
     Generate X, Y, Z cylinders of length size in the form of a pythreejs
     Line object.
@@ -396,7 +398,7 @@ def origin_marker(size, axis_rad=0.25, axis_color='yellow'):
     axis_rad : float
                 radius of cylinder representing each axis (default: 0.25)
     axis_color : color
-                color the axes are drawn in (default: 'yellow')
+                color the axes are drawn in (default: '#FFFF00' aka yellow)
 
     Returns
     -------
