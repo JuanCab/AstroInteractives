@@ -70,6 +70,7 @@ Quick Installation Instructions
 
 1. Clone this repository with:
    `git clone https://github.com/JuanCab/AstroInteractives.git`
+   or download the ZIP compressed copy of this repository if you don't have `git` and un-zip the repository into a new directory.
 
 2. If you don't have a current python installation, install Anaconda Python 3 downloaded from [https://www.anaconda.com/download/](https://www.anaconda.com/download/)
 
