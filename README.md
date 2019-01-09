@@ -65,6 +65,24 @@ Known Issues
 ------------
 - In some interactives, the animations are buffered by the web browser so that they lag behind the user inputs.  Efforts have been made to optimize the code to avoid these problems.
 
+Quick Installation Instructions
+-------------------------------
+
+1. Clone this repository with:
+   `git clone https://github.com/JuanCab/AstroInteractives.git`
+
+2. If you don't have a current python installation, install Anaconda Python 3 downloaded from [https://www.anaconda.com/download/](https://www.anaconda.com/download/)
+
+3. Open a shell and add the `conda-forge` channel to the list of places conda looks for packages at using the command: 
+   `conda config --append channel conda-forge`
+    
+4. Install the necessary packages not included with Anaconda (assuming you are using anaconda) with the command: 
+   `conda install appmode bqplot pywidgets pythreejs` 
+    or otherwise examine the `environment.yml` file to see the list of required python packages you will need to install.
+    
+5. Run the notebooks by changing to the directory containing this README file and typing: 
+    `jupyter notebook index.ipynb`
+
 Help / Documentation
 --------------------
 
