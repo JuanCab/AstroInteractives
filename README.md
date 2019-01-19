@@ -65,8 +65,9 @@ Known Issues
 ------------
 - In some interactives, the animations are buffered by the web browser so that they lag behind the user inputs.  Efforts have been made to optimize the code to avoid these problems.
 
-Quick Installation Instructions
+Installation Instructions
 -------------------------------
+If you want to install an entire JupyterHub server to run this for your students, I have [outlined one possible approach here](https://github.com/JuanCab/TLJH_AstroInteractives_Instructions).  Otherwise, if you just want to run these notebooks locally on your own computer, you can use the following commands to do it:
 
 1. Clone this repository with:
    `git clone https://github.com/JuanCab/AstroInteractives.git`
