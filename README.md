@@ -4,8 +4,8 @@ Astro Interactives
 [*Astro Interactives*](https://juancab.github.io/AstroInteractives/) is a series of Jupyter Notebooks meant to provide 
 interactive demos and simulations for introductory astronomy courses (and in a few cases, upper-division astrophysics courses).  These notebooks were initially developed by 
 - Juan Cabanela (Professor for Physics and Astronomy at Minnesota State University Moorhead)
-- Andrew Louwagie Gordon (Student at Minnesota State University Moorhead)
-- Sam Holen (Student at Minnesota State University Moorhead)
+- Andrew Louwagie Gordon (Minnesota State University Moorhead Physics Major, Class of 2019)
+- Sam Holen (Minnesota State University Moorhead Physics Major, Class of 2019)
 
 This software is provide "as-is" and may contain bugs/errors that could  mis-represent astronomical reality.  You use this software at your own risk!
 
