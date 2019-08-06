@@ -3,7 +3,9 @@ channels:
   - conda-forge
 dependencies:
   - appmode
+  - astropy
   - bqplot
+  - matplotlib
   - pandas
   - scipy
   - ipywidgets>=7.2
