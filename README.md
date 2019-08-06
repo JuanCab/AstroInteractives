@@ -86,11 +86,13 @@ If you want to install an entire JupyterHub server to run this for your students
    `conda config --append channel conda-forge`
     
 4. Install the necessary packages not included with Anaconda (assuming you are using anaconda) with the command: 
-   `conda install appmode bqplot pywidgets pythreejs` 
+   `conda install appmode astropy bqplot matplotlib pywidgets pythreejs` 
     or otherwise examine the `environment.yml` file to see the list of required python packages you will need to install.
     
 5. Run the notebooks by changing to the directory containing this README file and typing: 
     `jupyter notebook index.ipynb`
+    
+6. **[Optional]** If you want to make these apps availabe to multiple students in a class, you may prefer to setup a Jupyterhub server.   We installed these files on a [The Littlest Jupyter Hub](https://github.com/jupyterhub/the-littlest-jupyterhub) installation on a virtual private server running Ubuntu linux.  We then use [Voila](https://github.com/QuantStack/voila) to serve the notebooks to our students without requiring them to login to the server.  It seems to work well.
 
 Help / Documentation
 --------------------
