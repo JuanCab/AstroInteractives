@@ -74,7 +74,7 @@ Known Issues
 
 Installation Instructions
 -------------------------------
-If you want to install an entire JupyterHub server to run this for your students, I have [outlined one possible approach here](https://github.com/JuanCab/TLJH_AstroInteractives_Instructions).  Otherwise, if you just want to run these notebooks locally on your own computer, you can use the following commands to do it:
+If you just want to run these notebooks locally on your own computer, you can use the following commands to do it:
 
 1. Clone this repository with:
    `git clone https://github.com/JuanCab/AstroInteractives.git`
@@ -92,7 +92,10 @@ If you want to install an entire JupyterHub server to run this for your students
 5. Run the notebooks by changing to the directory containing this README file and typing: 
     `jupyter notebook index.ipynb`
     
-6. **[Optional]** If you want to make these apps availabe to multiple students in a class, you may prefer to setup a Jupyterhub server.   We installed these files on a [The Littlest Jupyter Hub](https://github.com/jupyterhub/the-littlest-jupyterhub) installation on a virtual private server running Ubuntu linux.  We then use [Voila](https://github.com/QuantStack/voila) to serve the notebooks to our students without requiring them to login to the server.  It seems to work well.
+6. **[Optional if you want to install these on a server for use by multiple users]** If you want to make these apps availabe to multiple students in a class, you may prefer to setup a Jupyterhub server.   We installed these files on a [The Littlest Jupyter Hub](https://github.com/jupyterhub/the-littlest-jupyterhub) installation on a virtual private server running Ubuntu linux.  I have [outlined one possible approach to doing this here](https://github.com/JuanCab/TLJH_AstroInteractives_Instructions).
+Rather than create accounts for each students, we then use [Voila](https://github.com/QuantStack/voila) to serve the notebooks to our students without requiring them to login to the server.  It seems to work well.
+
+
 
 Help / Documentation
 --------------------
