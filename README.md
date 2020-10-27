@@ -47,7 +47,7 @@ The currently available Interactives are the following:
 
 The following interactives are meant to be used in an upper-division astrophysics class as a way of introducing l-v diagrams and 21-cm spectra.  These are not really meant to introduce the concepts but rather to allow students to explore how the distribution of neutral hydrogen gas both in position and velocity affects the observed l-v diagram of the Milky Way galaxy and the HI spectra of external galaxies.
 1. [Synthetic l-v Diagram](Interactives/Synthetic_LV_Diagram.ipynb) -  This interactive takes a Milky Way-like rotation curve and neutral gas profile and generates a synthetic l-v diagram.  Users can then simply trace out a new rotation curve or neutral gas profile and see the corresponding l-v diagram.
-2. [Synthetic HI Spectra](Interactives/Synthetic_Galaxy_HI_Spectra.ipynb) - This interactive model allows a student to see the single-dish (unresolve) HI spectra or the resolved HI spectra (aka velocity map) corresponding to a given model galaxy.  As with the l-v diagram interactive, users can  trace out a new rotation curve or neutral gas profile and see the corresponding spectra.
+2. [Synthetic HI Spectra](Interactives/Synthetic_Galaxy_HI_Spectra.ipynb) - This interactive model allows a student to see the single-dish (unresolved) HI spectra or the resolved HI spectra (aka velocity map) corresponding to a given model galaxy.  As with the l-v diagram interactive, users can  trace out a new rotation curve or neutral gas profile and see the corresponding spectra.
 
 
 Dependencies
