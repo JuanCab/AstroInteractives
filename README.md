@@ -58,7 +58,7 @@ These Jupyter notebooks require a `jupyter` server installation as well as the f
 - `astropy`
 - `bqplot`
 - `pythreejs` (version >= 1.0.0)
-- `appmode` (This allows the Jupyter notebook to run as an app within JupyterNotebook.  Another choice is to use `viola` which runs the Jupyter notebook as an app with its own server.)
+- `voila` (This allows the Jupyter notebook to run as an app.  Replaces old use of `appmode`)
 
 which in turn depend on
 
