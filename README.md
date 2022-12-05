@@ -55,13 +55,14 @@ Dependencies
 
 These Jupyter notebooks require a `jupyter` server installation as well as the following python packages:
 
-- `ipywidgets` (version >= 8.0)
+- `astropy`
 - `bqplot`
 - `pythreejs` (version >= 1.0.0)
 - `appmode` (This allows the Jupyter notebook to run as an app within JupyterNotebook.  Another choice is to use `viola` which runs the Jupyter notebook as an app with its own server.)
 
 which in turn depend on
 
+- `ipywidgets` (version >= 8.0)
 - `traitlets` (version >= 4.3.0)
 - `traittypes`
 - `numpy`
