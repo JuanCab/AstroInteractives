@@ -4,6 +4,7 @@ channels:
 dependencies:
   - astropy
   - bqplot
+  - jupyter
   - matplotlib
   - pandas
   - scipy
