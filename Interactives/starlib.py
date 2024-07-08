@@ -1006,7 +1006,7 @@ class BinaryStarModel(traitlets.HasTraits):
         # Create empty dataframe
         RadVelInfo = pd.DataFrame(columns=['time', 'phase', 'v1r', 'v2r'])
         RadVelInfo['time'] = orbit_info['time']
-        RadVelInfo['phase'] = orbit_info['time']/float(orbit_info['time'][-1:])
+        RadVelInfo['phase'] = orbit_info['time']/float(orbit_info['time'].iloc[-1])
 
         # Compute radial velocities based on inclination angle
         proj = np.sin(incl*deg2rad)

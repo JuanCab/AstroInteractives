@@ -31,14 +31,14 @@ def exp2LaTeX(num, sig_fig=2):
 
     Example: To display the LaTeX version of a mole in a ipywidget Label,
     one can do the following.
-        r'\({}\)'.format(exp2LaTeX(6.02e23)[1])
+        f'{exp2LaTeX(6.02e23)[1]}'
 
     Parameters
     ----------
     num : float
-           a number (must be convertable to float with call to float(num))
+           a number (must be convertible to float with call to float(num))
     sig_fig : int
-               the number of signficant figures to keep.
+               the number of significant figures to keep.
 
     Returns
     -------
