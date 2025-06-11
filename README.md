@@ -57,17 +57,17 @@ These Jupyter notebooks require a `jupyter` server installation as well as the f
 
 - `astropy`
 - `bqplot`
+- `numpy`
+- `pandas`
 - `pythreejs` (version >= 1.0.0)
-- `voila` (This allows the Jupyter notebook to run as an app.  Replaces old use of `appmode`)
-
-which in turn depend on
-
 - `ipywidgets` (version >= 8.0)
 - `traitlets` (version >= 4.3.0)
 - `traittypes`
-- `numpy`
-- `pandas`
+- `voila` (This allows the Jupyter notebook to run as an app.  Replaces old use of `appmode`)
 
+if you want to turn these into static webpages, you also need 
+
+- `voici`
 
 Known Issues
 ------------
@@ -75,31 +75,44 @@ Known Issues
 
 Installation Instructions
 -------------------------------
-If you just want to run these notebooks locally on your own computer, you can use the following commands to do it:
+If you just want to run these notebooks locally on your own computer, you can use the following commands on a linux/macOS computer to do it:
 
 1. Clone this repository with:
    `git clone https://github.com/JuanCab/AstroInteractives.git`
    or download the ZIP compressed copy of this repository if you don't have `git` and un-zip the repository into a new directory.
 
-2. If you don't have a current python installation, install Anaconda Python 3 downloaded from [https://www.anaconda.com/download/](https://www.anaconda.com/download/)
-
-3. Open a shell and add the `conda-forge` channel to the list of places conda looks for packages at using the command: 
-   `conda config --append channel conda-forge`
+2. If you use `conda` you can create and activate an `astrointeractives` environment using the provided `environment.yml` with the command
+    ```bash
+    conda env create -f environment.yml
+    conda activate astrointeractives
+    ```
+   otherwise if you can use a standard Python virtual environment using venv:
+   ```bash
+   python -m venv astrointeractives
+   source astrointeractives/bin/activate
+   pip install --upgrade pip
+   pip install -r requirements.txt
+   jupyter nbextension enable --py widgetsnbextension
+   jupyter labextension install @jupyter-widgets/jupyterlab-manager
+   ```
     
-4. Install the necessary packages not included with Anaconda (assuming you are using anaconda) with the command: 
-   `conda install appmode astropy bqplot matplotlib pywidgets pythreejs` 
-    or otherwise examine the `environment.yml` file to see the list of required python packages you will need to install.
-    
-5. Run the notebooks by changing to the directory containing this README file and typing: 
+3. Run the notebooks by changing to the directory containing this README file and typing: 
     `jupyter notebook index.ipynb`
     
-6. **[Optional if you want to install these on a server for use by multiple users]** If you want to make these apps availabe to multiple students in a class, you may prefer to setup a Jupyterhub server.   We installed these files on a [The Littlest Jupyter Hub](https://github.com/jupyterhub/the-littlest-jupyterhub) installation on a virtual private server running Ubuntu linux.  I have [outlined one possible approach to doing this here](https://github.com/JuanCab/TLJH_AstroInteractives_Instructions).
-Rather than create accounts for each students, we then use [Voila](https://github.com/QuantStack/voila) to serve the notebooks to our students without requiring them to login to the server.  It seems to work well.
-
+4. If you want to create a static website in a directory called `webapp` that can later be loaded to your own web server to provide these interactives publically, you can use `voici`:
+   ```
+   voici build --contents Interactives  --output-dir=webapp
+   ```
+   then to test it you can launch a local web server in Python
+   ```
+   python -m http.server 8000 --directory webapp
+   ```
+   and point your browser to [http://localhost:8000](http://localhost:8000).
+   
 
 
 Help / Documentation
 --------------------
 
-- The documentation for how the Python notebooks do what they do are in the code comments for now.  We hope to eventually add copies of some of the lab exercises we do so people can see these on context.
+- The documentation for how the Python notebooks do what they do are in the code comments for now.
 - Send us an email at cabanela@mnstate.edu if you need any help/information.

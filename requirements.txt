@@ -1,0 +1,12 @@
+astropy
+bqplot
+jupyter
+matplotlib
+pandas
+scipy
+ipysheet
+ipywidgets>=8.0
+numpy>=1.13
+pythreejs>=1.0.0
+voila>=0.5.6
+voici
